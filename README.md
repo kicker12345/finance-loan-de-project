@@ -1,10 +1,10 @@
-# 🏦 Finance Loan Data Engineering Project
+#  Finance Loan Data Engineering Project
 
 A cloud-based end-to-end data engineering pipeline built on **Azure Databricks** and **Azure Data Lake Storage Gen2 (ADLS)** to process, clean, and calculate loan scores for 2.26 million+ loan records in the finance domain.
 
 ---
 
-## 📋 Project Overview
+##  Project Overview
 
 This project ingests a **1.5GB raw finance dataset** (`FinanceProjectData.csv`), splits it into domain-specific datasets, applies multi-stage data cleaning, creates external Parquet tables using **Unity Catalog**, and finally computes a **Loan Score** for each customer based on three weighted criteria.
 
@@ -19,7 +19,7 @@ This project ingests a **1.5GB raw finance dataset** (`FinanceProjectData.csv`),
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 Raw CSV (1.5GB) in Databricks Volumes
@@ -63,7 +63,7 @@ Raw CSV (1.5GB) in Databricks Volumes
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 finance-loan-de-project/
@@ -91,7 +91,7 @@ finance-loan-de-project/
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Technology | Purpose |
 |---|---|
@@ -106,23 +106,23 @@ finance-loan-de-project/
 
 ---
 
-## 🔄 Pipeline Sequence
+##  Pipeline Sequence
 
 | Step | Notebook | Description | Layer |
 |---|---|---|---|
-| 1 | `01_finance_project_setup.ipynb` | Load raw CSV, generate SHA-256 hash keys, split into 4 datasets | 🔵 Bronze |
-| 2 | `02_data_cleaning_1.ipynb` | Clean customers data (schema, dedup, nulls, emp_length, address_state) | 🟡 Silver |
-| 3 | `03_data_cleaning_2.ipynb` | Clean loans data (schema, nulls, loan_term, loan_purpose standardization) | 🟡 Silver |
-| 4 | `04_data_cleaning_3.ipynb` | Clean loan repayments (nulls, zero payments fix, date corrections) | 🟡 Silver |
-| 5 | `05_data_cleaning_4.ipynb` | Clean loan defaulters (type casting, split into delinq & records datasets) | 🟡 Silver |
-| 6 | `06_permanent_table_creation.ipynb` | Create 5 external tables on ADLS Gen2 via Unity Catalog | 🟠 Silver/Gold |
-| 7 | `07_access_patterns_quick_and_slow.ipynb` | Create consolidated view (slow access) & managed table (quick access) | 🟠 Silver/Gold |
-| 8 | `08_identifying_bad_data.ipynb` | Detect duplicate member_ids, segregate bad data, create clean new tables | 🟠 Silver/Gold |
-| 9 | `09_loan_score_processing_and_storing.ipynb` | Calculate loan scores & grades (A-F), store results in Processed folder | 🟢 Gold |
+| 1 | `01_finance_project_setup.ipynb` | Load raw CSV, generate SHA-256 hash keys, split into 4 datasets | Bronze |
+| 2 | `02_data_cleaning_1.ipynb` | Clean customers data (schema, dedup, nulls, emp_length, address_state) |  Silver |
+| 3 | `03_data_cleaning_2.ipynb` | Clean loans data (schema, nulls, loan_term, loan_purpose standardization) |  Silver |
+| 4 | `04_data_cleaning_3.ipynb` | Clean loan repayments (nulls, zero payments fix, date corrections) |  Silver |
+| 5 | `05_data_cleaning_4.ipynb` | Clean loan defaulters (type casting, split into delinq & records datasets) |  Silver |
+| 6 | `06_permanent_table_creation.ipynb` | Create 5 external tables on ADLS Gen2 via Unity Catalog |  Silver/Gold |
+| 7 | `07_access_patterns_quick_and_slow.ipynb` | Create consolidated view (slow access) & managed table (quick access) |  Silver/Gold |
+| 8 | `08_identifying_bad_data.ipynb` | Detect duplicate member_ids, segregate bad data, create clean new tables |  Silver/Gold |
+| 9 | `09_loan_score_processing_and_storing.ipynb` | Calculate loan scores & grades (A-F), store results in Processed folder |  Gold |
 
 ---
 
-## 📊 Dataset Details
+## Dataset Details
 
 ### Raw Data Stats
 | Metric | Value |
@@ -143,7 +143,7 @@ finance-loan-de-project/
 
 ---
 
-## 🧹 Data Cleaning Summary
+##  Data Cleaning Summary
 
 ### Customers (Notebook 2)
 - Defined custom schema with correct data types
@@ -172,7 +172,7 @@ finance-loan-de-project/
 
 ---
 
-## 🏛️ External Tables (Unity Catalog)
+##  External Tables (Unity Catalog)
 
 5 external tables created on ADLS Gen2 using Unity Catalog with Azure Managed Identity authentication:
 
@@ -192,11 +192,11 @@ finance-loan-de-project/
 
 ---
 
-## 🎯 Loan Score Calculation
+##  Loan Score Calculation
 
 Loan score is calculated based on **3 weighted criteria**:
 
-### 1️⃣ Payment History — 25% weight
+### 1️ Payment History — 25% weight
 | Condition | Points |
 |---|---|
 | Last payment > 1.5x monthly installment | 800 (Excellent) |
@@ -205,7 +205,7 @@ Loan score is calculated based on **3 weighted criteria**:
 | Last payment between 0.5x and 1x installment | 250 (Bad) |
 | Last payment < 0.5x installment | 100 (Very Bad) |
 
-### 2️⃣ Defaulters History — 45% weight
+### 2️ Defaulters History — 45% weight
 | Column | 0 occurrences | 1-2 | 3-5 | >5 |
 |---|---|---|---|---|
 | `delinq_2yrs` | 800 | 250 | 100 | 0 |
@@ -213,7 +213,7 @@ Loan score is calculated based on **3 weighted criteria**:
 | `pub_rec_bankruptcies` | 800 | 250 | 100 | 100 |
 | `inq_last_6mths` | 800 | 250 | 100 | 0 |
 
-### 3️⃣ Financial Health — 30% weight
+### 3️ Financial Health — 30% weight
 | Factor | Condition | Points |
 |---|---|---|
 | Loan Status | Fully Paid | 800 |
@@ -230,7 +230,7 @@ Loan score is calculated based on **3 weighted criteria**:
 ### Final Loan Grade
 | Loan Score | Grade |
 |---|---|
-| > 2500 | A ⭐ |
+| > 2500 | A  |
 | 1500 – 2500 | B |
 | 1000 – 1500 | C |
 | 500 – 1000 | D |
@@ -239,7 +239,7 @@ Loan score is calculated based on **3 weighted criteria**:
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Azure Databricks workspace (Unity Catalog enabled)
@@ -271,7 +271,7 @@ Loan score is calculated based on **3 weighted criteria**:
 
 ---
 
-## 📦 Requirements
+##  Requirements
 
 ```
 pyspark
@@ -285,15 +285,40 @@ pyyaml
 
 ---
 
-## 🧪 Testing
+##  Testing
 
+This project includes **9 automated unit tests** covering all critical data transformation and business logic.
+
+### Test Coverage
+
+| # | Test | What It Validates |
+|---|---|---|
+| 1 | `test_emp_length_cleaning` | Removes non-digits from emp_length (e.g. "9 years" → "9") |
+| 2 | `test_address_state_cleaning` | Replaces states longer than 2 chars with "NA" |
+| 3 | `test_loan_purpose_cleaning` | Keeps valid purposes, replaces invalid ones with "other" |
+| 4 | `test_null_annual_income_removal` | Removes rows where annual_income is null |
+| 5 | `test_emp_length_null_replacement` | Replaces null emp_length with average value (6 years) |
+| 6 | `test_loan_term_conversion` | Converts loan term from months to years (e.g. "36 months" → 3) |
+| 7 | `test_zero_payment_fix` | Fixes records where total_payment = 0 but principal exists |
+| 8 | `test_loan_score_calculation` | Validates weighted loan score formula (25% + 45% + 30%) |
+| 9 | `test_loan_grade_assignment` | Validates grade assignment logic (A-F) based on loan score |
+
+### Run Tests Locally
 ```bash
-pytest tests/
+pip install pytest
+pytest tests/test_data_cleaning.py -v
+```
+
+### CI/CD - Automated Testing
+Tests run automatically on every push to GitHub via **GitHub Actions**:
+-  Triggered on every push to `master` branch
+-  Runs all 9 tests in under 15 seconds
+-  Fails the pipeline if any test breaks
 ```
 
 ---
 
-## 📈 Future Improvements
+##  Future Improvements
 
 - [ ] Merge DataCleaning notebooks into a single unified pipeline
 - [ ] Add CI/CD with GitHub Actions
@@ -304,13 +329,13 @@ pytest tests/
 
 ---
 
-## 👤 Author
+##  Author
 
-**Himanshu Pal**
+**Pankaj Yadav**
 - GitHub: [@kicker12345](https://github.com/kicker12345)
 
 ---
 
-## 📄 License
+##  License
 
-This project is for educational and portfolio purposes.
+This project is for upskilling and portfolio purposes.
